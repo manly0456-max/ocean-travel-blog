@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wanderwave – Nhật ký du lịch của Khoan</title>
+  <meta name="description" content="Wanderwave – blog du lịch cá nhân: biển đảo, núi rừng, phố thị và ẩm thực." />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+
+  <!-- Google Fonts: Montserrat (chữ chính, giống Luminary) + Cormorant Garamond (chữ nghiêng trang trí) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body class="is-loading">
+
+  <!-- ============ 1. PRELOADER (màn hình chờ) ============ -->
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader__wave">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <p class="preloader__text">Đang ra khơi…</p>
+  </div>
+
+  <!-- ============ 2. CON TRỎ TUỲ CHỈNH ============ -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- ============ 3. SIDE PANELS (học từ Luminary) ============ -->
+  <!-- Bên trái: thanh tiến độ cuộn trang -->
+  <aside class="side-panel side-panel--left" aria-hidden="true">
+    <span class="side-panel__label">SCROLL</span>
+    <div class="side-progress"><div class="side-progress__bar" id="scrollBar"></div></div>
+    <span class="side-panel__percent" id="scrollPercent">0%</span>
+  </aside>
+  <!-- Bên phải: chấm chỉ mục section (scrollspy) -->
+  <nav class="side-panel side-panel--right" aria-label="Chỉ mục trang">
+    <ul class="side-dots" id="sideDots">
+      <li><a href="#home" data-label="Trang chủ"></a></li>
+      <li><a href="#journeys" data-label="Hành trình"></a></li>
+      <li><a href="#blog" data-label="Bài viết"></a></li>
+      <li><a href="#timeline" data-label="Dòng thời gian"></a></li>
+      <li><a href="#gallery" data-label="Thư viện ảnh"></a></li>
+      <li><a href="#about" data-label="Về mình"></a></li>
+      <li><a href="#tips" data-label="Kinh nghiệm"></a></li>
+      <li><a href="#contact" data-label="Liên hệ"></a></li>
+    </ul>
+  </nav>
+
+  <!-- ============ 4. HEADER / NAVBAR ============ -->
+  <header class="header" id="header">
+    <div class="container header__inner">
+      <a href="#home" class="logo">
+        <span class="logo__icon">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M2 20c4 0 4-4 8-4s4 4 8 4 4-4 8-4 4 4 4 4" /><path d="M2 26c4 0 4-4 8-4s4 4 8 4 4-4 8-4 4 4 4 4" /><circle cx="22" cy="9" r="4" /></svg>
+        </span>
+        <span>Wander<b>wave</b></span>
+      </a>
+      <nav class="nav" aria-label="Menu chính">
+        <a href="#journeys" class="nav__link">Hành trình</a>
+        <a href="#blog" class="nav__link">Bài viết</a>
+        <a href="#gallery" class="nav__link">Thư viện</a>
+        <a href="#about" class="nav__link">Về mình</a>
+        <a href="#tips" class="nav__link">Kinh nghiệm</a>
+      </nav>
+      <a href="#contact" class="btn btn--primary btn--sm header__cta" data-magnetic data-ripple>Liên hệ</a>
+      <button class="burger" id="burger" aria-label="Mở menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Menu toàn màn hình cho điện thoại -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav>
+      <a href="#journeys" style="--i:1">Hành trình</a>
+      <a href="#blog" style="--i:2">Bài viết</a>
+      <a href="#timeline" style="--i:3">Dòng thời gian</a>
+      <a href="#gallery" style="--i:4">Thư viện</a>
+      <a href="#about" style="--i:5">Về mình</a>
+      <a href="#tips" style="--i:6">Kinh nghiệm</a>
+      <a href="#contact" style="--i:7">Liên hệ</a>
+    </nav>
+  </div>
+
+  <main>
+    <!-- ============ 5. HERO ============ -->
+    <section class="hero" id="home" data-section>
+      <div class="hero__bg" data-speed="0.3"></div>
+      <!-- Lưới + đèn spotlight chạy theo chuột (hiệu ứng chính của Luminary) -->
+      <div class="hero__grid" id="heroGrid"></div>
+      <!-- Canvas vẽ bong bóng nước nổi lên -->
+      <canvas class="hero__bubbles" id="bubbles"></canvas>
+
+      <div class="container hero__content">
+        <p class="eyebrow" data-reveal="up">✦ Nhật ký du lịch cá nhân</p>
+        <h1 class="hero__title" data-reveal="up" style="--d:.1s">
+          Theo con sóng<br />
+          đến <span class="text-gradient typed" id="typed">Hạ Long</span><span class="typed-caret">|</span>
+        </h1>
+        <p class="hero__desc" data-reveal="up" style="--d:.2s">
+          Mình là <b>Khoan</b> – sinh viên mê xê dịch. Nơi đây lưu lại những vùng biển xanh,
+          những đỉnh núi mây phủ và cả những món ăn ngon trên mỗi chặng đường.
+        </p>
+        <div class="hero__actions" data-reveal="up" style="--d:.3s">
+          <a href="#blog" class="btn btn--primary" data-magnetic data-ripple>Khám phá bài viết <span class="btn__arrow">→</span></a>
+          <a href="#journeys" class="btn btn--ghost" data-magnetic data-ripple>Hành trình nổi bật</a>
+        </div>
+
+        <!-- Bộ đếm số động: giá trị lấy từ API /api/stats -->
+        <div class="hero__stats" data-reveal="up" style="--d:.4s">
+          <div class="stat"><strong data-count="0" data-stat="countries">0</strong><span>Quốc gia</span></div>
+          <div class="stat"><strong data-count="0" data-stat="posts">0</strong><span>Bài viết</span></div>
+          <div class="stat"><strong data-count="0" data-stat="kilometers" data-suffix="+">0</strong><span>Km đã đi</span></div>
+          <div class="stat"><strong data-count="0" data-stat="likes">0</strong><span>Lượt thả tim</span></div>
+        </div>
+      </div>
+
+      <a href="#journeys" class="scroll-hint" aria-label="Cuộn xuống"><span></span></a>
+
+      <!-- Sóng biển SVG chuyển động ở đáy hero -->
+      <div class="waves" aria-hidden="true">
+        <svg class="wave wave--1" viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0 60 C 240 120 480 0 720 60 S 1200 120 1440 60 V120 H0Z" /></svg>
+        <svg class="wave wave--2" viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0 70 C 240 10 480 120 720 70 S 1200 10 1440 70 V120 H0Z" /></svg>
+        <svg class="wave wave--3" viewBox="0 0 1440 120" preserveAspectRatio="none"><path d="M0 80 C 360 40 720 120 1080 80 S 1440 60 1440 80 V120 H0Z" /></svg>
+      </div>
+    </section>
+
+    <!-- ============ 6. TICKER điểm đến chạy vô hạn ============ -->
+    <div class="ticker" aria-label="Các điểm đến">
+      <div class="ticker__track">
+        <!-- Nội dung được nhân đôi để vòng lặp liền mạch -->
+        <span>Hạ Long</span><span>✦</span><span>Sa Pa</span><span>✦</span><span>Hội An</span><span>✦</span>
+        <span>Phú Quốc</span><span>✦</span><span>Hà Giang</span><span>✦</span><span>Kyoto</span><span>✦</span>
+        <span>Bali</span><span>✦</span><span>Bangkok</span><span>✦</span><span>Huế</span><span>✦</span><span>Santorini</span><span>✦</span>
+        <span aria-hidden="true">Hạ Long</span><span aria-hidden="true">✦</span><span aria-hidden="true">Sa Pa</span><span aria-hidden="true">✦</span><span aria-hidden="true">Hội An</span><span aria-hidden="true">✦</span>
+        <span aria-hidden="true">Phú Quốc</span><span aria-hidden="true">✦</span><span aria-hidden="true">Hà Giang</span><span aria-hidden="true">✦</span><span aria-hidden="true">Kyoto</span><span aria-hidden="true">✦</span>
+        <span aria-hidden="true">Bali</span><span aria-hidden="true">✦</span><span aria-hidden="true">Bangkok</span><span aria-hidden="true">✦</span><span aria-hidden="true">Huế</span><span aria-hidden="true">✦</span><span aria-hidden="true">Santorini</span><span aria-hidden="true">✦</span>
+      </div>
+    </div>
+
+    <!-- ============ 7. HÀNH TRÌNH NỔI BẬT (showcase xen kẽ trái/phải) ============ -->
+    <section class="section" id="journeys" data-section>
+      <div class="container">
+        <header class="section__head" data-reveal="up">
+          <p class="eyebrow">01 — Hành trình nổi bật</p>
+          <h2 class="section__title">Những chuyến đi <em>đáng nhớ nhất</em></h2>
+        </header>
+        <!-- JS sẽ đổ dữ liệu bài is_featured = TRUE vào đây -->
+        <div class="showcase-list" id="showcaseList"></div>
+      </div>
+    </section>
+
+    <!-- ============ 8. BLOG (danh sách bài viết từ database) ============ -->
+    <section class="section section--alt" id="blog" data-section>
+      <div class="container">
+        <header class="section__head" data-reveal="up">
+          <p class="eyebrow">02 — Bài viết</p>
+          <h2 class="section__title">Nhật ký <em>trên từng chặng đường</em></h2>
+        </header>
+
+        <div class="toolbar" data-reveal="up" style="--d:.1s">
+          <div class="chips" id="filterChips" role="tablist">
+            <button class="chip is-active" data-category="all">Tất cả</button>
+            <button class="chip" data-category="beach">🏝 Biển đảo</button>
+            <button class="chip" data-category="mountain">⛰ Núi rừng</button>
+            <button class="chip" data-category="city">🏮 Phố thị</button>
+            <button class="chip" data-category="food">🍜 Ẩm thực</button>
+          </div>
+          <label class="search">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <input type="search" id="searchInput" placeholder="Tìm điểm đến…" autocomplete="off" />
+          </label>
+        </div>
+
+        <div class="post-grid" id="postGrid" aria-live="polite"></div>
+        <p class="empty-state" id="emptyState" hidden>Không tìm thấy bài viết phù hợp 🧭</p>
+      </div>
+    </section>
+
+    <!-- ============ 9. DÒNG THỜI GIAN ============ -->
+    <section class="section" id="timeline" data-section>
+      <div class="container">
+        <header class="section__head" data-reveal="up">
+          <p class="eyebrow">03 — Dòng thời gian</p>
+          <h2 class="section__title">Bản đồ <em>những lần xê dịch</em></h2>
+        </header>
+        <div class="timeline" id="timelineWrap">
+          <div class="timeline__line"><div class="timeline__fill" id="timelineFill"></div></div>
+          <ol class="timeline__list" id="timelineList"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10. THƯ VIỆN ẢNH ============ -->
+    <section class="section section--alt" id="gallery" data-section>
+      <div class="container">
+        <header class="section__head" data-reveal="up">
+          <p class="eyebrow">04 — Thư viện ảnh</p>
+          <h2 class="section__title">Khoảnh khắc <em>đóng khung</em></h2>
+        </header>
+        <div class="gallery" id="gallery-grid"></div>
+      </div>
+    </section>
+
+    <!-- ============ 11. VỀ MÌNH ============ -->
+    <section class="section" id="about" data-section>
+      <div class="container about">
+        <div class="about__media" data-reveal="left">
+          <div class="about__img" data-tilt>
+            <img src="assets/img/about.jpg" alt="Ngắm biển lúc bình minh" loading="lazy" />
+          </div>
+          <div class="about__badge float">
+            <strong>5+</strong><span>năm<br />xê dịch</span>
+          </div>
+        </div>
+        <div class="about__text" data-reveal="right">
+          <p class="eyebrow">05 — Về mình</p>
+          <h2 class="section__title">Xin chào, mình là <em>Khoan</em></h2>
+          <p>Sinh viên Hệ thống Thông tin, ban ngày viết code, cuối tuần xách balo lên và đi. Mình tin rằng mỗi chuyến đi đều dạy mình một điều mới – về thế giới và về chính mình.</p>
+          <p>Blog này là nơi mình chia sẻ lịch trình, chi phí và những mẹo nhỏ để bạn có thể tự tin lên đường.</p>
+          <!-- Thanh kỹ năng: chiều rộng chạy từ 0 -> giá trị khi cuộn tới -->
+          <div class="skills">
+            <div class="skill"><span>Săn hoàng hôn</span><div class="skill__bar"><i style="--w:95%"></i></div></div>
+            <div class="skill"><span>Leo núi trekking</span><div class="skill__bar"><i style="--w:80%"></i></div></div>
+            <div class="skill"><span>Chụp ảnh phong cảnh</span><div class="skill__bar"><i style="--w:85%"></i></div></div>
+            <div class="skill"><span>Ăn tất cả mọi thứ</span><div class="skill__bar"><i style="--w:100%"></i></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 12. KINH NGHIỆM (FAQ accordion) ============ -->
+    <section class="section section--alt" id="tips" data-section>
+      <div class="container container--narrow">
+        <header class="section__head" data-reveal="up">
+          <p class="eyebrow">06 — Kinh nghiệm</p>
+          <h2 class="section__title">Mẹo nhỏ <em>cho chuyến đi lớn</em></h2>
+          <button class="btn btn--ghost btn--sm" id="toggleAll" data-ripple>Mở tất cả</button>
+        </header>
+        <div class="faq" id="faq">
+          <div class="faq__item" data-reveal="up">
+            <button class="faq__q" aria-expanded="false">Nên chuẩn bị gì cho chuyến đi biển?<span class="faq__icon"></span></button>
+            <div class="faq__a"><div><p>Kem chống nắng SPF50+, kính râm, mũ rộng vành, túi chống nước cho điện thoại và một bộ đồ bơi dự phòng. Đừng quên thuốc chống say sóng nếu đi tàu.</p></div></div>
+          </div>
+          <div class="faq__item" data-reveal="up" style="--d:.05s">
+            <button class="faq__q" aria-expanded="false">Đi du lịch tiết kiệm cho sinh viên thế nào?<span class="faq__icon"></span></button>
+            <div class="faq__a"><div><p>Đặt vé sớm 1–2 tháng, đi vào ngày thường, ở homestay/hostel, ăn ở quán địa phương và đi chung nhóm để chia chi phí xe.</p></div></div>
+          </div>
+          <div class="faq__item" data-reveal="up" style="--d:.1s">
+            <button class="faq__q" aria-expanded="false">Thời điểm đẹp nhất để đi Sa Pa, Hà Giang?<span class="faq__icon"></span></button>
+            <div class="faq__a"><div><p>Sa Pa đẹp nhất tháng 9–10 (lúa chín). Hà Giang tháng 10–11 có hoa tam giác mạch. Tháng 12–1 có thể gặp băng tuyết nhưng rất lạnh.</p></div></div>
+          </div>
+          <div class="faq__item" data-reveal="up" style="--d:.15s">
+            <button class="faq__q" aria-expanded="false">Làm sao chụp ảnh phong cảnh đẹp bằng điện thoại?<span class="faq__icon"></span></button>
+            <div class="faq__a"><div><p>Chụp vào "giờ vàng" (sau bình minh và trước hoàng hôn 1 tiếng), bật lưới 3x3, hạ thấp góc máy và luôn có một tiền cảnh.</p></div></div>
+          </div>
+          <div class="faq__item" data-reveal="up" style="--d:.2s">
+            <button class="faq__q" aria-expanded="false">Có nên mua bảo hiểm du lịch không?<span class="faq__icon"></span></button>
+            <div class="faq__a"><div><p>Có, đặc biệt khi đi nước ngoài hoặc tham gia trekking, lặn biển. Chi phí chỉ vài chục nghìn mỗi ngày nhưng giúp bạn yên tâm hơn rất nhiều.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 13. LIÊN HỆ + NEWSLETTER ============ -->
+    <section class="section" id="contact" data-section>
+      <div class="container contact">
+        <div class="contact__info" data-reveal="left">
+          <p class="eyebrow">07 — Liên hệ</p>
+          <h2 class="section__title">Cùng nhau <em>lên đường</em> nhé?</h2>
+          <p>Bạn muốn hỏi lịch trình, rủ đi chung hay hợp tác viết bài? Gửi tin nhắn cho mình nhé.</p>
+
+          <form class="newsletter glass" id="newsletterForm" novalidate>
+            <h3>📮 Nhận bài viết mới qua email</h3>
+            <div class="newsletter__row">
+              <input type="email" name="email" placeholder="email@cua-ban.com" required />
+              <button class="btn btn--primary" type="submit" data-ripple>Đăng ký</button>
+            </div>
+          </form>
+        </div>
+
+        <form class="contact-form glass" id="contactForm" data-reveal="right" novalidate>
+          <div class="field">
+            <input type="text" id="cName" name="name" placeholder=" " required minlength="2" />
+            <label for="cName">Họ và tên</label>
+          </div>
+          <div class="field">
+            <input type="email" id="cEmail" name="email" placeholder=" " required />
+            <label for="cEmail">Email</label>
+          </div>
+          <div class="field">
+            <textarea id="cMsg" name="message" rows="5" placeholder=" " required minlength="10"></textarea>
+            <label for="cMsg">Lời nhắn của bạn</label>
+          </div>
+          <button class="btn btn--primary btn--block" type="submit" data-ripple data-magnetic>
+            Gửi tin nhắn <span class="btn__arrow">✈</span>
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ 14. FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer__inner">
+      <a href="#home" class="logo"><span>Wander<b>wave</b></span></a>
+      <p>© <span id="year"></span> Wanderwave · Personal Travel Blog · Made with 💙 by Khoan</p>
+      <a href="/admin" class="footer__admin">Quản trị</a>
+    </div>
+  </footer>
+
+  <!-- ============ 15. MODAL CHI TIẾT BÀI VIẾT ============ -->
+  <div class="modal" id="postModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal__backdrop" data-close></div>
+    <article class="modal__panel">
+      <button class="modal__close" data-close aria-label="Đóng">✕</button>
+      <div class="modal__body" id="modalBody"><!-- JS đổ nội dung vào đây --></div>
+    </article>
+  </div>
+
+  <!-- ============ 16. LIGHTBOX XEM ẢNH ============ -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" aria-label="Đóng">✕</button>
+    <button class="lightbox__nav lightbox__nav--prev" aria-label="Ảnh trước">‹</button>
+    <figure><img id="lightboxImg" alt="" /><figcaption id="lightboxCap"></figcaption></figure>
+    <button class="lightbox__nav lightbox__nav--next" aria-label="Ảnh sau">›</button>
+  </div>
+
+  <!-- ============ 17. TOAST & NÚT LÊN ĐẦU TRANG ============ -->
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <button class="to-top" id="toTop" aria-label="Lên đầu trang">
+    <svg viewBox="0 0 48 48"><circle class="to-top__track" cx="24" cy="24" r="21" /><circle class="to-top__ring" id="toTopRing" cx="24" cy="24" r="21" /></svg>
+    <span>↑</span>
+  </button>
+
+  <!-- type="module": cho phép dùng import/export giữa các file JS -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

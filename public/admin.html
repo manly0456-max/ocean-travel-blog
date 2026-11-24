@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản trị – Wanderwave</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body class="admin">
+
+  <!-- ===== MÀN HÌNH ĐĂNG NHẬP ===== -->
+  <section class="login" id="loginView">
+    <form class="login__card glass" id="loginForm">
+      <a href="/" class="logo"><span>Wander<b>wave</b></span></a>
+      <h1>Trang quản trị</h1>
+      <p>Nhập <code>ADMIN_KEY</code> đã cấu hình trên Vercel để tiếp tục.</p>
+      <input type="password" id="adminKey" placeholder="Admin key" required autocomplete="current-password" />
+      <button class="btn btn--primary btn--block" id="loginBtn" type="submit" data-ripple>Đăng nhập</button>
+      <a href="/" class="login__back">← Về trang chủ</a>
+    </form>
+  </section>
+
+  <!-- ===== BẢNG ĐIỀU KHIỂN ===== -->
+  <section class="dashboard" id="dashView" hidden>
+    <header class="dash__top">
+      <a href="/" class="logo"><span>Wander<b>wave</b></span></a>
+      <span class="dash__tag">Admin</span>
+      <button class="btn btn--ghost btn--sm" id="logoutBtn">Đăng xuất</button>
+    </header>
+
+    <div class="container">
+      <!-- Thẻ thống kê -->
+      <div class="kpis" id="kpis"></div>
+
+      <!-- Biểu đồ cột: số bài theo danh mục (vẽ bằng CSS) -->
+      <div class="chart glass">
+        <h3>Bài viết theo danh mục</h3>
+        <div class="chart__bars" id="chartBars"></div>
+      </div>
+
+      <!-- Tabs -->
+      <nav class="tabs" id="tabs">
+        <button class="tab is-active" data-tab="posts">📝 Bài viết</button>
+        <button class="tab" data-tab="contacts">✉️ Tin nhắn</button>
+        <button class="tab" data-tab="subscribers">📮 Người đăng ký</button>
+        <span class="tabs__ink" id="tabInk"></span>
+      </nav>
+
+      <!-- Tab bài viết -->
+      <div class="panel is-active" data-panel="posts">
+        <div class="panel__head">
+          <h2>Quản lý bài viết</h2>
+          <button class="btn btn--primary btn--sm" id="newPostBtn" data-ripple>+ Thêm bài</button>
+        </div>
+        <div class="table-wrap glass">
+          <table>
+            <thead><tr><th>Bài viết</th><th>Danh mục</th><th>Ngày đi</th><th>❤️</th><th>👁</th><th>💬</th><th></th></tr></thead>
+            <tbody id="postRows"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab tin nhắn -->
+      <div class="panel" data-panel="contacts">
+        <div class="panel__head"><h2>Tin nhắn liên hệ</h2></div>
+        <div class="msg-list" id="contactList"></div>
+      </div>
+
+      <!-- Tab người đăng ký -->
+      <div class="panel" data-panel="subscribers">
+        <div class="panel__head"><h2>Người đăng ký nhận tin</h2></div>
+        <div class="table-wrap glass">
+          <table>
+            <thead><tr><th>#</th><th>Email</th><th>Ngày đăng ký</th></tr></thead>
+            <tbody id="subRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== NGĂN KÉO FORM THÊM / SỬA BÀI ===== -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer__backdrop" data-close-drawer></div>
+    <form class="drawer__panel" id="postForm">
+      <div class="drawer__head">
+        <h2 id="drawerTitle">Thêm bài viết</h2>
+        <button type="button" class="modal__close" data-close-drawer aria-label="Đóng">✕</button>
+      </div>
+      <input type="hidden" name="id" />
+      <label>Tiêu đề <input name="title" required maxlength="200" /></label>
+      <div class="grid-2">
+        <label>Danh mục
+          <select name="category">
+            <option value="beach">Biển đảo</option>
+            <option value="mountain">Núi rừng</option>
+            <option value="city">Phố thị</option>
+            <option value="food">Ẩm thực</option>
+          </select>
+        </label>
+        <label>Ngày đi <input type="date" name="travel_date" /></label>
+        <label>Địa danh <input name="location" required /></label>
+        <label>Quốc gia <input name="country" required value="Việt Nam" /></label>
+        <label>Số phút đọc <input type="number" name="read_minutes" min="1" value="5" /></label>
+        <label>Quãng đường (km) <input type="number" name="distance_km" min="0" value="0" /></label>
+      </div>
+      <label>Ảnh bìa
+        <select name="cover_image" id="coverSelect"></select>
+      </label>
+      <label>Tóm tắt <textarea name="excerpt" rows="2" required maxlength="400"></textarea></label>
+      <label>Nội dung <small>(mỗi đoạn cách nhau 1 dòng trống)</small><textarea name="content" rows="9" required></textarea></label>
+      <label class="check"><input type="checkbox" name="is_featured" /> Hiển thị ở "Hành trình nổi bật"</label>
+      <button class="btn btn--primary btn--block" type="submit" data-ripple>💾 Lưu bài viết</button>
+    </form>
+  </div>
+
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+/* =====================================================================
+   WANDERWAVE – ANIMATIONS.CSS
+   Tất cả @keyframes và trạng thái hiệu ứng được gom vào 1 file
+   để dễ tìm, dễ giải thích khi thuyết trình.
+   ===================================================================== */
+
+/* ---------- A. SCROLL REVEAL ----------
+   Phần tử có data-reveal ban đầu ẩn & lệch vị trí.
+   Khi cuộn tới, JS thêm class .is-visible -> trượt về vị trí gốc.
+   --d là độ trễ (delay) để các phần tử xuất hiện "so le". */
+[data-reveal] {
+  opacity: 0;
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+  transition-delay: var(--d, 0s);
+}
+[data-reveal='up']    { transform: translateY(50px); }
+[data-reveal='left']  { transform: translateX(-60px); }
+[data-reveal='right'] { transform: translateX(60px); }
+[data-reveal='zoom']  { transform: scale(0.88); }
+[data-reveal].is-visible { opacity: 1; transform: none; }
+
+/* Thanh kỹ năng chạy từ 0 -> --w khi section About hiện ra */
+.about__text.is-visible .skill__bar i { width: var(--w); }
+
+/* ---------- B. PRELOADER: 5 cột nhấp nhô như sóng ---------- */
+@keyframes wave-bar {
+  0%, 100% { transform: scaleY(0.3); }
+  50%      { transform: scaleY(1); }
+}
+.preloader__wave span { animation: wave-bar 1s ease-in-out infinite; }
+.preloader__wave span:nth-child(2) { animation-delay: 0.1s; }
+.preloader__wave span:nth-child(3) { animation-delay: 0.2s; }
+.preloader__wave span:nth-child(4) { animation-delay: 0.3s; }
+.preloader__wave span:nth-child(5) { animation-delay: 0.4s; }
+
+/* ---------- C. SÓNG BIỂN Ở ĐÁY HERO ----------
+   SVG rộng 200%, dịch sang trái 50% rồi lặp lại -> sóng chạy vô tận. */
+@keyframes wave-move {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.wave--1 { animation: wave-move 18s linear infinite; }
+.wave--2 { animation: wave-move 12s linear infinite reverse; opacity: 0.9; }
+.wave--3 { animation: wave-move 26s linear infinite; }
+
+/* ---------- D. CHỮ GRADIENT "LẤP LÁNH" ---------- */
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+.text-gradient { animation: gradient-shift 5s ease-in-out infinite; }
+
+/* ---------- E. CON TRỎ NHẤP NHÁY CỦA HIỆU ỨNG GÕ CHỮ ---------- */
+@keyframes blink { 50% { opacity: 0; } }
+.typed-caret { animation: blink 0.9s steps(1) infinite; }
+
+/* ---------- F. TICKER CHẠY NGANG VÔ HẠN ---------- */
+@keyframes ticker {
+  to { transform: translateX(-50%); }   /* nội dung đã nhân đôi nên -50% là vừa 1 vòng */
+}
+.ticker__track { animation: ticker 40s linear infinite; }
+
+/* ---------- G. GỢI Ý CUỘN (con chuột) ---------- */
+@keyframes scroll-dot {
+  0%   { opacity: 0; transform: translateY(0); }
+  40%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(14px); }
+}
+.scroll-hint span { animation: scroll-dot 1.8s ease-in-out infinite; }
+
+/* ---------- H. NỔI BỒNG BỀNH ---------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-14px); }
+}
+.float { animation: float 5s ease-in-out infinite; }
+
+/* ---------- I. SKELETON SHIMMER (khi đang tải) ---------- */
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+.skeleton .card__media, .skeleton__line { animation: shimmer 1.6s linear infinite; }
+
+/* ---------- J. RIPPLE: vòng tròn lan ra khi click nút ---------- */
+@keyframes ripple {
+  to { transform: scale(4); opacity: 0; }
+}
+.ripple {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: rgba(255, 255, 255, 0.45);
+  transform: scale(0); animation: ripple 0.7s ease-out forwards;
+}
+
+/* ---------- K. TRÁI TIM "BÙNG NỔ" khi thả tim ---------- */
+@keyframes heart-pop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.45); }
+  60%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.like-btn.pop svg { animation: heart-pop 0.6s var(--ease); }
+@keyframes particle {
+  to { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+.heart-particle {
+  position: absolute; left: 30px; top: 50%; width: 8px; height: 8px; border-radius: 50%;
+  pointer-events: none; animation: particle 0.7s ease-out forwards;
+}
+
+/* ---------- L. LỌC BÀI VIẾT: thẻ hiện ra so le ---------- */
+@keyframes card-in {
+  from { opacity: 0; transform: translateY(30px) scale(0.96); }
+  to   { opacity: 1; transform: none; }
+}
+.card.is-entering { animation: card-in 0.6s var(--ease) both; animation-delay: var(--d, 0s); }
+.comment.is-new { animation: card-in 0.6s var(--ease) both; }
+
+/* ---------- M. TOAST TRƯỢT VÀO / TRƯỢT RA ---------- */
+@keyframes toast-in  { from { opacity: 0; transform: translateX(110%); } to { opacity: 1; transform: none; } }
+@keyframes toast-out { to   { opacity: 0; transform: translateX(110%); } }
+.toast { animation: toast-in 0.5s var(--ease) both; }
+.toast.is-leaving { animation: toast-out 0.4s var(--ease) forwards; }
+
+/* ---------- N. LẮC NHẸ KHI FORM LỖI ---------- */
+@keyframes shake {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+.shake { animation: shake 0.45s ease; }
+
+/* ---------- O. VÒNG SÁNG NHỊP THỞ trên nút CTA ---------- */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(95, 242, 201, 0.55); }
+  100% { box-shadow: 0 0 0 18px rgba(95, 242, 201, 0); }
+}
+.header__cta { animation: pulse-ring 2.4s ease-out infinite; }
+
+/* ---------- P. TÔN TRỌNG NGƯỜI DÙNG TẮT HIỆU ỨNG ----------
+   Nếu hệ điều hành bật "Giảm chuyển động" -> tắt gần hết animation. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-reveal] { opacity: 1; transform: none; }
+}
